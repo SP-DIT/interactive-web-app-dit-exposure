@@ -1,0 +1,104 @@
+/* General styles */
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: white;
+    color: #333;
+    line-height: 1.6;
+    margin: 0;
+    padding: 20px;
+}
+
+h1,
+h2 {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+h1 {
+    font-size: 32px;
+}
+
+h2 {
+    font-size: 24px;
+}
+
+/* Instructions */
+#instructions {
+    background-color: f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+#instructions p {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+#instructions code {
+    font-family: 'Roboto Mono', monospace;
+    color: #ff3b3b;
+}
+
+ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+#instructions ul li {
+    background-color: transparent;
+    border: none;
+    color: #333;
+    margin-bottom: 5px;
+    padding: 0;
+}
+
+/* Exercise */
+h2 span {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+h2 button {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.button-55 {
+    background-color: #ff3b3b;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 10px 20px;
+    transition: background-color 0.3s ease;
+}
+
+.button-55:hover {
+    background-color: #e63333;
+}
+
+.button-55:active {
+    background-color: #cc2b2b;
+}
+
+/* Content list */
+ul#contentList {
+    width: 100px;
+}
+
+ul#contentList li {
+    background-color: #fdd835;
+    border: 1px solid #fdd835;
+    border-radius: 5px;
+    color: #333;
+    margin-bottom: 5px;
+    padding: 10px;
+    transition: background-color 0.3s ease;
+}
+
+ul#contentList li:hover {
+    background-color: #fccc25;
+}

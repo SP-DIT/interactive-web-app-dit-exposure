@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Mini IT Exposure Program</title>
+        <link rel="stylesheet" href="styles.css" />
+    </head>
+    <body>
+        <h1>Mini IT Exposure Program</h1>
+
+        <div id="instructions">
+            <p>Instructions:</p>
+            <ul>
+                <li>Use the <code>addItem(value)</code> function to add items to the list.</li>
+                <li>Use the <code>removeLastItem()</code> function to remove the last item from the list.</li>
+                <li>Use the <code>reset()</code> function to reset the list to its initial state.</li>
+            </ul>
+        </div>
+
+        <h2><span>Exercise: </span><span id="instruction" style="font-weight: normal"></span></h2>
+        <h2>
+            <button class="button-55" id="next-exercise" hidden>Next Exercise</button>
+        </h2>
+
+        <ul id="contentList">
+            <li>Content 1</li>
+            <li>Content 2</li>
+            <li>Content 3</li>
+        </ul>
+
+        <script>
+            let data = [1, 4, 7, 8, 12, 16, 18, 20, 25];
+            const exercises = [
+                {
+                    expectedValues: [
+                        'Content 1',
+                        'Content 2',
+                        'Content 3',
+                        '1',
+                        '4',
+                        '7',
+                        '8',
+                        '12',
+                        '16',
+                        '18',
+                        '20',
+                        '25',
+                    ],
+                    instruction: `Using a for loop and the data array, adds the values in "data" array to the list.`,
+                    reset: true,
+                },
+                {
+                    expectedValues: ['Content 1', 'Content 2', 'Content 3', '1', '4', '16', '25'],
+                    instruction: `Using a for loop and an if-else statement, adds only the square numbers in the "data" array to the list.`,
+                },
+                {
+                    expectedValues: ['25', '16', '4', '1', 'Content 3', 'Content 2', 'Content 1'],
+                    instruction: `Using an Array, for loops, and if-else, reverse the existing contents`,
+                    final: true,
+                },
+            ];
+            let currentExercise = 0;
+
+            const nextExerciseButton = document.getElementById('next-exercise');
+            nextExerciseButton.onclick = function () {
+                if (exercises[currentExercise].reset) reset();
+                currentExercise += 1;
+                startExercise();
+            };
+
+            function startExercise() {
+                document.getElementById('instruction').textContent = exercises[currentExercise].instruction;
+                nextExerciseButton.hidden = true;
+            }
+
+            function checkExerciseComplete() {
+                // check if list matches expected values
+                let expectedValues = exercises[currentExercise].expectedValues;
+                let listItems = Array.from(contentList.children).map((li) => li.textContent);
+                if (listItems.join() === expectedValues.join()) {
+                    alert('List matches expected values!');
+                    exercises[currentExercise].completed = true;
+                    if (currentExercise < exercises.length) {
+                        nextExerciseButton.hidden = false;
+                    }
+                }
+            }
+
+            function addItem(item) {
+                let contentList = document.getElementById('contentList');
+                let li = document.createElement('li');
+                li.appendChild(document.createTextNode(item));
+                contentList.appendChild(li);
+
+                checkExerciseComplete();
+            }
+
+            function removeItem() {
+                let contentList = document.getElementById('contentList');
+                let latestItem = contentList.lastElementChild;
+                if (latestItem) {
+                    contentList.removeChild(latestItem);
+                    return latestItem.textContent;
+                } else {
+                    return null;
+                }
+            }
+
+            function reset() {
+                while (removeItem()) {}
+
+                if (!currentExercise || exercises[currentExercise].reset) {
+                    for (let i = 0; i < 3; i++) {
+                        addItem(`Content ${i + 1}`);
+                    }
+                } else {
+                    const values = exercises[currentExercise - 1].expectedValues;
+                    for (let i = 0; i < values.length; i++) {
+                        addItem(values[i]);
+                    }
+                }
+
+                startExercise();
+            }
+
+            reset();
+        </script>
+    </body>
+</html>
