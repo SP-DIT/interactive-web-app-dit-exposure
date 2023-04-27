@@ -3,6 +3,7 @@
     <head>
         <title>Mini IT Exposure Program</title>
         <link rel="stylesheet" href="styles.css" />
+        <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     </head>
     <body>
         <h1>Mini IT Exposure Program</h1>
@@ -16,7 +17,10 @@
             </ul>
         </div>
 
-        <h2><span>Exercise: </span><span id="instruction" style="font-weight: normal"></span></h2>
+        <h2>
+            <span>Exercise <span id="exercise-id"></span>: </span>
+            <span id="instruction" style="font-weight: normal"></span>
+        </h2>
         <h2>
             <button class="button-55" id="next-exercise" hidden>Next Exercise</button>
         </h2>
@@ -30,6 +34,16 @@
         <script>
             let data = [1, 4, 7, 8, 12, 16, 18, 20, 25];
             const exercises = [
+                {
+                    expectedValues: ['Content 1', 'Content 2', 'Content 3', 'hello', 'hello', 'hello'],
+                    instruction: `Open terminal and use addItem(value) to add 3 "hello"`,
+                    initialValue: 0,
+                },
+                {
+                    expectedValues: ['Content 1', 'Content 2', 'Content 3'],
+                    instruction: `Now use removeLastItem() to remove the 3 "hello"`,
+                    initialValue: -1,
+                },
                 {
                     expectedValues: [
                         'Content 1',
@@ -46,28 +60,33 @@
                         '25',
                     ],
                     instruction: `Using a for loop and the data array, adds the values in "data" array to the list.`,
-                    reset: true,
+                    initialValue: 0,
                 },
                 {
                     expectedValues: ['Content 1', 'Content 2', 'Content 3', '1', '4', '16', '25'],
                     instruction: `Using a for loop and an if-else statement, adds only the square numbers in the "data" array to the list.`,
+                    initialValue: 0,
                 },
                 {
                     expectedValues: ['25', '16', '4', '1', 'Content 3', 'Content 2', 'Content 1'],
                     instruction: `Using an Array, for loops, and if-else, reverse the existing contents`,
+                    initialValue: -1,
                     final: true,
                 },
             ];
             let currentExercise = 0;
 
             const nextExerciseButton = document.getElementById('next-exercise');
+            const exerciseIdLabel = document.getElementById('exercise-id');
+
             nextExerciseButton.onclick = function () {
-                if (exercises[currentExercise].reset) reset();
                 currentExercise += 1;
+                reset();
                 startExercise();
             };
 
             function startExercise() {
+                exerciseIdLabel.textContent = currentExercise + 1;
                 document.getElementById('instruction').textContent = exercises[currentExercise].instruction;
                 nextExerciseButton.hidden = true;
             }
@@ -77,28 +96,30 @@
                 let expectedValues = exercises[currentExercise].expectedValues;
                 let listItems = Array.from(contentList.children).map((li) => li.textContent);
                 if (listItems.join() === expectedValues.join()) {
-                    alert('List matches expected values!');
+                    confetti({
+                        particleCount: 300,
+                        spread: 100,
+                    });
                     exercises[currentExercise].completed = true;
-                    if (currentExercise < exercises.length) {
-                        nextExerciseButton.hidden = false;
-                    }
+                    nextExerciseButton.hidden = currentExercise + 1 >= exercises.length;
                 }
             }
 
-            function addItem(item) {
+            function addItem(item, check = true) {
                 let contentList = document.getElementById('contentList');
                 let li = document.createElement('li');
                 li.appendChild(document.createTextNode(item));
                 contentList.appendChild(li);
 
-                checkExerciseComplete();
+                check && checkExerciseComplete();
             }
 
-            function removeItem() {
+            function removeLastItem(check = true) {
                 let contentList = document.getElementById('contentList');
                 let latestItem = contentList.lastElementChild;
                 if (latestItem) {
                     contentList.removeChild(latestItem);
+                    check && checkExerciseComplete();
                     return latestItem.textContent;
                 } else {
                     return null;
@@ -106,16 +127,16 @@
             }
 
             function reset() {
-                while (removeItem()) {}
+                while (removeLastItem(false)) {}
 
-                if (!currentExercise || exercises[currentExercise].reset) {
+                if (!exercises[currentExercise].initialValue) {
                     for (let i = 0; i < 3; i++) {
-                        addItem(`Content ${i + 1}`);
+                        addItem(`Content ${i + 1}`, false);
                     }
                 } else {
-                    const values = exercises[currentExercise - 1].expectedValues;
+                    const values = exercises[currentExercise + exercises[currentExercise].initialValue].expectedValues;
                     for (let i = 0; i < values.length; i++) {
-                        addItem(values[i]);
+                        addItem(values[i], false);
                     }
                 }
 

@@ -84,6 +84,10 @@ h2 button {
     background-color: #cc2b2b;
 }
 
+.button-55[hidden] {
+    display: none;
+}
+
 /* Content list */
 ul#contentList {
     width: 100px;
